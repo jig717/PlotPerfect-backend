@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to PlotPerfect</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .header p {
+            margin: 10px 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px 30px;
+            color: #333333;
+            line-height: 1.6;
+        }
+        .content h2 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .content p {
+            margin-bottom: 20px;
+        }
+        .user-name {
+            font-weight: 600;
+            color: #764ba2;
+        }
+        .features {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .features ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .features li {
+            margin-bottom: 10px;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 35px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            padding: 25px 30px;
+            text-align: center;
+            color: #666666;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .social-links {
+            margin-top: 15px;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 8px;
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>🎉 Welcome to PlotPerfect!</h1>
+            <p>Your journey to perfect plotting starts here</p>
+        </div>
+        
+        <div class="content">
+            <h2>Hello, <span class="user-name">{{userName}}</span>!</h2>
+            
+            <p>Thank you for registering with <strong>PlotPerfect</strong>! We're thrilled to have you on board. You've taken the first step towards an amazing plotting experience.</p>
+            
+            <div class="features">
+                <strong>What you can do with PlotPerfect:</strong>
+                <ul>
+                    <li>Create stunning plots and visualizations</li>
+                    <li>Access powerful charting tools</li>
+                    <li>Save and manage your projects easily</li>
+                    <li>Connect with other plotting enthusiasts</li>
+                </ul>
+            </div>
+            
+            <p>Ready to get started? Explore our platform and discover the power of beautiful data visualization!</p>
+            
+            <center>
+                <a href="{{loginUrl}}" class="cta-button">Get Started</a>
+            </center>
+            
+            <p>If you have any questions or need assistance, our support team is always here to help. Just reply to this email and we'll get back to you as soon as possible.</p>
+            
+            <p>Best regards,<br>The <strong>PlotPerfect</strong> Team</p>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2026 PlotPerfect. All rights reserved.</p>
+            <div class="social-links">
+                <a href="{{websiteUrl}}">Website</a> | 
+                <a href="{{supportUrl}}">Support</a> | 
+                <a href="{{privacyUrl}}">Privacy Policy</a>
+            </div>
+            <p style="margin-top: 15px; font-size: 12px; color: #999;">
+                You're receiving this email because you registered on PlotPerfect.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
