@@ -88,6 +88,10 @@ const imageProxyRoute = require("./src/routes/imageProxy");
 app.use("/payment", paymentRoute);
 app.use("/images", imageProxyRoute);
 
+// PROXY (third-party requests to avoid CORS)
+const proxyRoute = require('./src/routes/ProxyRoute');
+app.use('/proxy', proxyRoute);
+
 // SALE REQUESTS
 const saleRequestRoute = require("./src/routes/SaleRequestRoute");
 app.use("/sale-requests", saleRequestRoute);
