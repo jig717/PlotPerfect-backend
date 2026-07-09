@@ -7,6 +7,15 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 app.use(express.json()) 
+// PNA middleware must run before CORS middleware so preflight responses include the header
+app.use((req, res, next) => {
+    try {
+        if (req.headers['access-control-request-private-network']) {
+            res.setHeader('Access-Control-Allow-Private-Network', 'true');
+        }
+    } catch (e) {}
+    next();
+});
 app.use(cors({
   origin: [
     'http://localhost:3000',
@@ -24,6 +33,21 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.urlencoded({ extended: true }));
+
+// Support Private Network Access preflight (Access-Control-Request-Private-Network)
+// This allows secure (https) origins to make requests to loopback/private addresses
+// when the browser includes the `Access-Control-Request-Private-Network` header.
+app.use((req, res, next) => {
+    try {
+        const acrpn = req.headers['access-control-request-private-network'];
+        if (acrpn) {
+            res.setHeader('Access-Control-Allow-Private-Network', 'true');
+        }
+    } catch (e) {
+        // ignore
+    }
+    next();
+});
 
 app.use((req, res, next) => {
     const startedAt = Date.now();
