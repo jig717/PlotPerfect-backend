@@ -47,7 +47,7 @@ const getUserFavorite = async (req, res) => {
   try {
     const favorites = await Favorite
       .find({ user: req.params.userId })
-      .populate("property");
+      .populate("property", "title price location images purpose type status _id");
 
     res.status(200).json({
       success: true,

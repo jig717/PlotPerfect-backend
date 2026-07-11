@@ -345,10 +345,19 @@ const streamProperties = async (req, res) => {
 // GET FILTERS METADATA
 const getPropertyFilters = async (req, res) => {
     try {
-        const cities = await Property.distinct("location.city");
-        const types = await Property.distinct("type");
-        const amenities = await Property.distinct("amenities");
-        
+        const timeout = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Query timeout')), 9000)
+        );
+
+        const [cities, types, amenities] = await Promise.race([
+            Promise.all([
+                Property.distinct("location.city"),
+                Property.distinct("type"),
+                Property.distinct("amenities"),
+            ]),
+            timeout,
+        ]);
+
         res.status(200).json({
             success: true,
             data: {
@@ -358,7 +367,12 @@ const getPropertyFilters = async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(500).json({ message: "Error fetching filters", error: error.message });
+        // Return empty arrays so the frontend can still load without filters
+        res.status(200).json({
+            success: false,
+            data: { cities: [], types: [], amenities: [] },
+            message: error.message,
+        });
     }
 };
 
