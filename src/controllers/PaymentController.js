@@ -112,8 +112,8 @@ const buildInvoiceReplacements = ({ payment, buyer, owner, property }) => {
     bookingStatus === "RENTED"
       ? "This payment has been recorded successfully and the property is now marked as rented."
       : bookingStatus === "SOLD"
-      ? "This payment has been recorded successfully and the property is now marked as sold."
-      : "This payment has been recorded successfully and the property is now marked as booked.";
+        ? "This payment has been recorded successfully and the property is now marked as sold."
+        : "This payment has been recorded successfully and the property is now marked as booked.";
 
   return {
     invoiceNumber: payment?.receipt || payment?._id?.toString() || "NA",
@@ -285,7 +285,9 @@ const createAdvanceTokenOrder = async (req, res) => {
       return res.status(404).json({ message: "Buyer not found" });
     }
 
-    const amountInPaise = Math.round(numericAmount * 100);
+    const isTestMode = process.env.RAZORPAY_KEY_ID?.startsWith("rzp_test_");
+    const calculatedPaise = Math.round(numericAmount * 100);
+    const amountInPaise = isTestMode ? Math.min(calculatedPaise, 4000000) : calculatedPaise;
     const receipt = buildReceipt("adv", propertyId);
     const order = await razorpayRequest("/orders", {
       method: "POST",
@@ -405,7 +407,9 @@ const createFullPaymentOrder = async (req, res) => {
       return res.status(404).json({ message: "Buyer not found" });
     }
 
-    const amountInPaise = Math.round(numericAmount * 100);
+    const isTestMode = process.env.RAZORPAY_KEY_ID?.startsWith("rzp_test_");
+    const calculatedPaise = Math.round(numericAmount * 100);
+    const amountInPaise = isTestMode ? Math.min(calculatedPaise, 40000000) : calculatedPaise;
     const receipt = buildReceipt("full", propertyId);
     const order = await razorpayRequest("/orders", {
       method: "POST",
@@ -617,8 +621,8 @@ const verifyAdvanceTokenPayment = async (req, res) => {
       confirmationStatus === "sent" && invoiceStatus === "sent"
         ? "sent"
         : confirmationStatus === "failed" && invoiceStatus === "failed"
-        ? "failed"
-        : "partial";
+          ? "failed"
+          : "partial";
     await payment.save();
 
     const hydratedPayment = await populatePayment(Payment.findById(payment._id));
@@ -781,8 +785,8 @@ const verifyFullPayment = async (req, res) => {
       confirmationStatus === "sent" && invoiceStatus === "sent"
         ? "sent"
         : confirmationStatus === "failed" && invoiceStatus === "failed"
-        ? "failed"
-        : "partial";
+          ? "failed"
+          : "partial";
     await payment.save();
 
     const hydratedPayment = await populatePayment(Payment.findById(payment._id));

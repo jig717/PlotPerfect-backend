@@ -1,4 +1,4 @@
-console.log("hell mode in backend server ") 
+console.log("hell mode in backend server ")
 
 const express = require('express');
 const app = express();
@@ -6,48 +6,26 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-app.use(express.json()) 
-// PNA middleware must run before CORS middleware so preflight responses include the header
-app.use((req, res, next) => {
-    try {
-        if (req.headers['access-control-request-private-network']) {
-            res.setHeader('Access-Control-Allow-Private-Network', 'true');
-        }
-    } catch (e) {}
-    next();
-});
+app.use(express.json())
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173', 
-    'http://localhost:5174',
-    'http://127.0.0.1:3000',
-        // allow deployed frontend on Vercel
+    origin: [
+        'http://localhost:3000',
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:5173',
+        'http://127.0.0.1:5174',
         'https://plotperfect-frontend.vercel.app',
-    'https://api.razorpay.com',
-    'https://checkout.razorpay.com',
-    'https://*.razorpay.com'
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+        /^https:\/plotperfect.*\.vercel\.app$/,
+        'https://api.razorpay.com',
+        'https://checkout.razorpay.com',
+        'https://*.razorpay.com'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.urlencoded({ extended: true }));
-
-// Support Private Network Access preflight (Access-Control-Request-Private-Network)
-// This allows secure (https) origins to make requests to loopback/private addresses
-// when the browser includes the `Access-Control-Request-Private-Network` header.
-app.use((req, res, next) => {
-    try {
-        const acrpn = req.headers['access-control-request-private-network'];
-        if (acrpn) {
-            res.setHeader('Access-Control-Allow-Private-Network', 'true');
-        }
-    } catch (e) {
-        // ignore
-    }
-    next();
-});
 
 app.use((req, res, next) => {
     const startedAt = Date.now();
@@ -112,10 +90,6 @@ const imageProxyRoute = require("./src/routes/imageProxy");
 app.use("/payment", paymentRoute);
 app.use("/images", imageProxyRoute);
 
-// PROXY (third-party requests to avoid CORS)
-const proxyRoute = require('./src/routes/ProxyRoute');
-app.use('/proxy', proxyRoute);
-
 // SALE REQUESTS
 const saleRequestRoute = require("./src/routes/SaleRequestRoute");
 app.use("/sale-requests", saleRequestRoute);
@@ -153,6 +127,6 @@ const notificationRoutes = require("./src/routes/NotificationRoute");
 app.use("/notifications", notificationRoutes);
 
 const PORT = Number(process.env.PORT || 3400);
-app.listen(PORT,()=> {
-    console.log(`server is running ${PORT}`);   
+app.listen(PORT, () => {
+    console.log(`server is running ${PORT}`);
 })
