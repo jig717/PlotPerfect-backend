@@ -57,9 +57,18 @@ app.get("/", (req, res) => {
     });
 });
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     if (mongoose.connection.readyState === 1) {
         return next();
+    }
+
+    try {
+        await connectDB();
+        if (mongoose.connection.readyState === 1) {
+            return next();
+        }
+    } catch (err) {
+        console.error("DB connection error in middleware:", err);
     }
 
     return res.status(503).json({
